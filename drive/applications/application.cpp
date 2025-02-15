@@ -21,14 +21,17 @@ void application(hardware_map_t& hardware_map)
   // auto& can_identifier_filter = *hardware_map.can_identifier_filter.value();
 
   can_bus_manager.baud_rate(1.0_MHz);
-  hal::print(console, "breaking after buildin a bus manger\n");
   hal::can_message_finder spin_reader(can_transceiver, 0x101);
   hal::can_message_finder drive_reader(can_transceiver, 0x102);
   hal::can_message_finder translate_reader(can_transceiver, 0x103);
   hal::can_message_finder speed_reader(can_transceiver, 0x104);
   hal::can_message_finder homing_reader(can_transceiver, 0x105);
-  auto& steering_modules = *hardware_map.steering_modules;
-  auto& start_wheel_settings = *hardware_map.start_wheel_setting_span;
+
+  const hal::u8 system_reset = 0x76;
+  hal::print(console, "created things that we need.\n");
+
+  // auto& steering_modules = *hardware_map.steering_modules;
+  // auto& start_wheel_settings = *hardware_map.start_wheel_setting_span;
   // using namespace std::chrono_literals;
   // using namespace hal::literals;
 
@@ -122,8 +125,9 @@ void application(hardware_map_t& hardware_map)
 
   while (true) {
     try {
+      send_custom_message(0x14e, can_transceiver, 8, {system_reset, 0x0, 0x0, 0x0,0x0, 0x0, 0x0,0x0});
       hal::print(console, "Done homing");
-      home(steering_modules, start_wheel_settings, can_transceiver, clock, console); 
+      // home(steering_modules, start_wheel_settings, can_transceiver, clock, console); 
     } catch (hal::timed_out const&) {
       hal::print(
         console,

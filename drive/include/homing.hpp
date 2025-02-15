@@ -27,4 +27,5 @@ void home(std::span<steering_module> legs,
 const hal::u8 reset_command = 0x80;
 const hal::u8 encoder_zero_command = 0x64;
 
+
 }  // namespace sjsu::drive

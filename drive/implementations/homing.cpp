@@ -65,7 +65,7 @@ void home(std::span<steering_module> legs,
     send_custom_message(
       setting_span[i].steer_id, can, 8, { encoder_zero_command });
     hal::delay(clock, 500ms);
-    send_custom_message(setting_span[i].steer_id, can, 8, { reset_command });
+    send_custom_message(setting_span[i].steer_id, can, 8, {    });
     hal::delay(clock, 500ms);
     send_custom_message(0x205, can, 8, { reset_command });
   }
