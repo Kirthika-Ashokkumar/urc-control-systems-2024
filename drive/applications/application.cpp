@@ -27,11 +27,11 @@ void application(hardware_map_t& hardware_map)
   hal::can_message_finder speed_reader(can_transceiver, 0x104);
   hal::can_message_finder homing_reader(can_transceiver, 0x105);
 
-  const hal::u8 system_reset = 0x76;
+  // const hal::u8 system_reset = 0x76;
   hal::print(console, "created things that we need.\n");
 
-  // auto& steering_modules = *hardware_map.steering_modules;
-  // auto& start_wheel_settings = *hardware_map.start_wheel_setting_span;
+  auto& steering_modules = *hardware_map.steering_modules;
+  auto& start_wheel_settings = *hardware_map.start_wheel_setting_span;
   // using namespace std::chrono_literals;
   // using namespace hal::literals;
 

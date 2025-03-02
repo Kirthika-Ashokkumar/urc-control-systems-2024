@@ -194,11 +194,11 @@ hardware_map_t initialize_platform()
   // static std::span<steering_module, 4> steering_modules_span =
   //   steering_modules_arr;
 
-  // static std::array<steering_module, 1> steering_modules_arr = {
-  //   back_left_leg
-  // };
-  // static std::span<steering_module, 1> steering_modules_span =
-  //   steering_modules_arr;
+  static std::array<steering_module, 1> steering_modules_arr = {
+    back_left_leg
+  };
+  static std::span<steering_module, 1> steering_modules_span =
+    steering_modules_arr;
 
   return hardware_map_t{
     .clock = &counter,
@@ -206,8 +206,8 @@ hardware_map_t initialize_platform()
     .can_transceiver = can_transceiver,
     .can_bus_manager = bus_man,
     .can_identifier_filter = idf,
-    //  .steering_modules = steering_modules_span,
-    //  .start_wheel_setting_span = start_wheel_setting_span,
+    .steering_modules = steering_modules_span,
+    .start_wheel_setting_span = start_wheel_setting_span,
     .reset = []() { hal::cortex_m::reset(); }
   };
 }
