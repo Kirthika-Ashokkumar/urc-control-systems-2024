@@ -166,7 +166,7 @@ hardware_map_t initialize_platform()
     .limit_switch = &bl_pin_3,
   };
 
-  hal::print<1028>(terminal, "Steer rmd intialized\n");
+  // hal::print<1028>(terminal, "Steer rmd intialized\n");
 
   // static hal::actuator::rmd_mc_x_v2 mc_x_back_right_prop(
   //   *can_transceiver,
@@ -194,19 +194,21 @@ hardware_map_t initialize_platform()
   // static std::span<steering_module, 4> steering_modules_span =
   //   steering_modules_arr;
 
-  static std::array<steering_module, 1> steering_modules_arr = {
-    back_left_leg
-  };
-  static std::span<steering_module, 1> steering_modules_span =
-    steering_modules_arr;
+  // static std::array<steering_module, 1> steering_modules_arr = {
+  //   back_left_leg
+  // };
+  // static std::span<steering_module, 1> steering_modules_span =
+  //   steering_modules_arr;
 
-  return hardware_map_t{ .clock = &counter,
-                         .terminal = &terminal,
-                         .can_transceiver = can_transceiver,
-                         .can_bus_manager = bus_man,
-                         .can_identifier_filter = idf,
-                         .steering_modules = steering_modules_span,
-                         .start_wheel_setting_span = start_wheel_setting_span,
-                         .reset = []() { hal::cortex_m::reset(); } };
+  return hardware_map_t{
+    .clock = &counter,
+    .terminal = &terminal,
+    .can_transceiver = can_transceiver,
+    .can_bus_manager = bus_man,
+    .can_identifier_filter = idf,
+    //  .steering_modules = steering_modules_span,
+    //  .start_wheel_setting_span = start_wheel_setting_span,
+    .reset = []() { hal::cortex_m::reset(); }
+  };
 }
 }  // namespace sjsu::drive
