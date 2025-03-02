@@ -16,11 +16,10 @@ void send_custom_message(hal::u32 p_id,
                          hal::u8 p_length,
                          std::array<hal::byte, 8>&& p_payload);
 
-float get_angle(hal::u32 p_id, hal::can_transceiver& p_can);
 
 void home(std::span<steering_module> legs,
           std::span<start_wheel_setting> setting_span,
-          hal::can_transceiver& can,
+        //   hal::can_transceiver& can,
           hal::steady_clock& clock,
           hal::serial& terminal);
 

@@ -1,11 +1,11 @@
 #include "./application.hpp"
 
 #include "drive_configuration_updater.hpp"
+#include "homing.hpp"
+#include "settings.hpp"
 #include <libhal-util/can.hpp>
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
-#include "homing.hpp"
-#include "settings.hpp"
 
 namespace sjsu::drive {
 
@@ -21,7 +21,6 @@ void application(hardware_map_t& hardware_map)
   // auto& can_identifier_filter = *hardware_map.can_identifier_filter.value();
 
   can_bus_manager.baud_rate(1.0_MHz);
-  hal::print(console, "breaking after buildin a bus manger\n");
   hal::can_message_finder spin_reader(can_transceiver, 0x101);
   hal::can_message_finder drive_reader(can_transceiver, 0x102);
   hal::can_message_finder translate_reader(can_transceiver, 0x103);
@@ -94,7 +93,6 @@ void application(hardware_map_t& hardware_map)
   //   // Move all the wheels
   //   router.move(wheel_settings);
 
-
   // static hal::actuator::rmd_mc_x_v2 mc_x_front_right_steer(
   //   can_transceiver,
   //   can_identifier_filter,
@@ -112,20 +110,25 @@ void application(hardware_map_t& hardware_map)
   // static std::array<steering_module, 1> steering_modules_arr = {
   //   front_right_leg
   // };
-  
+
   // static std::span<steering_module, 1> steering_modules_span =
   //   steering_modules_arr;
-  
+
   //  hal::print(console, "homing\n");
-    // home(steering_modules, start_wheel_settings, can_transceiver, clock, console);
-    // hal::delay(clock, 1000ms);
-  home(steering_modules, start_wheel_settings, can_transceiver, clock, console); 
-/**
-* 101,102,103, 104, 105, 148+16^2..steer id + 16^2
- */
+  // home(steering_modules, start_wheel_settings, can_transceiver, clock,
+  // console); hal::delay(clock, 1000ms);
+  /**
+   * 101,102,103, 104, 105, 148+16^2..steer id + 16^2
+   */
   while (true) {
     try {
-      hal::print(console, "Done homing");
+      std::optional<hal::can_message> msg = homing_reader.find();
+      if (msg) {
+        hal::print(console, "found message\n");
+        home(steering_modules, start_wheel_settings, clock, console);
+        hal::print(console, "Done homing\n");
+      }
+
     } catch (hal::timed_out const&) {
       hal::print(
         console,
@@ -155,7 +158,7 @@ void application(hardware_map_t& hardware_map)
     }
 
     // address_offset = (address_offset + 1) % 16;
-    hal::delay(clock, 1s);
+    // hal::delay(clock, 1s);
   }
 }
 

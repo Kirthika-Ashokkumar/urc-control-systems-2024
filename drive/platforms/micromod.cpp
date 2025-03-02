@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #include <libhal/can.hpp>
+#include <libhal/error.hpp>
 #include <libhal/motor.hpp>
 #include <span>
 #include <string_view>
@@ -67,11 +68,13 @@ hardware_map_t initialize_platform()
 
   static std::array<hal::can_message, 8> receive_buffer{};
   can_transceiver = &hal::micromod::v1::can_transceiver(receive_buffer);
+  
   bus_man = &hal::micromod::v1::can_bus_manager();
   idf = &hal::micromod::v1::can_identifier_filter0();
+  idf->allow(0x105);
   hal::print<1028>(terminal, "can initialized\n");
   bus_man->baud_rate(1.0_MHz);
-  idf->allow(248);
+  // idf->allow(0x248);
   // static std::array<start_wheel_setting, 4> start_wheel_setting_arr = {
   //   front_left_wheel_setting,
   //   front_right_wheel_setting,
@@ -141,18 +144,23 @@ hardware_map_t initialize_platform()
 
   // static auto back_left_prop =
   //   mc_x_back_left_prop.acquire_motor(start_wheel_setting_arr[2].max_speed);
+  static hal::actuator::rmd_mc_x_v2* mc_x;
+  try {
+    static hal::actuator::rmd_mc_x_v2 mc_x_back_left_steer(
+      *can_transceiver,
+      *idf,
+      counter,
+      start_wheel_setting_arr[0].geer_ratio,
+      start_wheel_setting_arr[0].steer_id);
+    mc_x = &mc_x_back_left_steer;
+    hal::print<1028>(terminal, "RMD created\n");
 
-  static hal::actuator::rmd_mc_x_v2 mc_x_back_left_steer(
-    *can_transceiver,
-    *idf,
-    counter,
-    start_wheel_setting_arr[0].geer_ratio,
-    start_wheel_setting_arr[0].steer_id);
-
-  hal::print<1028>(terminal, "RMD created\n");
+  } catch (const hal::exception& e) {
+    hal::print<1028>(terminal, "RMD did not get created\n");
+  }
 
   static steering_module back_left_leg = {
-    .steer = &mc_x_back_left_steer, 
+    .steer = mc_x,
     // .propulsion = &back_left_prop,
     .propulsion = nullptr,
     .limit_switch = &bl_pin_3,
