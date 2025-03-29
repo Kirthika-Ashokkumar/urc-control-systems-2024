@@ -43,8 +43,10 @@ struct start_wheel_setting{
     std::uint16_t prop_id;
     float geer_ratio;
     bool reversed;
-    int offset;
+    int homing_offset;
+    int homing_angle;
     hal::rpm max_speed;
+
 };
 
 
