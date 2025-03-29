@@ -17,10 +17,10 @@ void application(hardware_map_t& hardware_map)
   auto& clock = *hardware_map.clock.value();
   auto& console = *hardware_map.terminal.value();
   auto& can_transceiver = *hardware_map.can_transceiver.value();
-  auto& can_bus_manager = *hardware_map.can_bus_manager.value();
+  // auto& can_bus_manager = *hardware_map.can_bus_manager.value();
   // auto& can_identifier_filter = *hardware_map.can_identifier_filter.value();
 
-  can_bus_manager.baud_rate(1.0_MHz);
+  // can_bus_manager.baud_rate(1.0_MHz);
   hal::can_message_finder spin_reader(can_transceiver, 0x101);
   hal::can_message_finder drive_reader(can_transceiver, 0x102);
   hal::can_message_finder translate_reader(can_transceiver, 0x103);
@@ -124,15 +124,20 @@ void application(hardware_map_t& hardware_map)
   /**
    * 101,102,103, 104, 105, 148+16^2..steer id + 16^2
    */
+
   while (true) {
     try {
       std::optional<hal::can_message> msg = homing_reader.find();
+
       if (msg) {
         hal::print(console, "found message\n");
         home(steering_modules, start_wheel_settings, clock, console);
+
         hal::print(console, "Done homing\n");
       }
-
+      hal::print<128>(console,
+                      "Circular Buffer Size: %d\n",
+                      can_transceiver.receive_cursor());
     } catch (hal::timed_out const&) {
       hal::print(
         console,
@@ -162,7 +167,7 @@ void application(hardware_map_t& hardware_map)
     }
 
     // address_offset = (address_offset + 1) % 16;
-    // hal::delay(clock, 1s);
+    hal::delay(clock, 1s);
   }
 }
 

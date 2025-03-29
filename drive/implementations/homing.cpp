@@ -18,7 +18,6 @@ void send_custom_message(hal::u32 p_id,
   p_can.send(message);
 }
 
-
 void home(std::span<steering_module> legs,
           std::span<start_wheel_setting> setting_span,
           // hal::can_transceiver& can,
@@ -27,7 +26,6 @@ void home(std::span<steering_module> legs,
 {
   for (size_t i = 0; i < legs.size(); i++) {
     auto& mc_x = legs[i].steer;
-   
     mc_x->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
     float start_angle = mc_x->feedback().angle();
     hal::print<128>(terminal, "start angle: %f\n", start_angle);
@@ -48,34 +46,6 @@ void home(std::span<steering_module> legs,
     hal::delay(clock, 1000ms);
 
     hal::print<128>(terminal, "Stopped angle: %f\n", stop_angle);
-
-    // int deg = 0;
-    // while (fabs(start_angle - stop_angle) > deg) {
-    //   servo.position(stop_angle);
-    //   stop_angle = setting_span[i].reversed ? stop_angle + 1 : stop_angle - 1;
-    //   deg++;
-    //   hal::print(terminal, "Stopped\n");
-    // }
-    // motor.power(0.0);
-    // hal::delay(clock, 1000ms);
-    // hal::delay(clock, 500ms);
-    // auto position = rotation_sensor.read();
-    // hal::print<1024>(terminal, "Current position feedback: %f\n", position);
-
-    // hal::delay(clock, 500ms);
-
-    // servo.position(position.angle + setting_span[i].offset);
-    // position = rotation_sensor.read();
-    // hal::print<1024>(
-    //   terminal, "After offset position feedback: %f\n", position);
-
-    // can message
-    // send_custom_message(
-    //   setting_span[i].steer_id, can, 8, { encoder_zero_command });
-    // hal::delay(clock, 500ms);
-    // send_custom_message(setting_span[i].steer_id, can, 8, { reset_command });
-    // hal::delay(clock, 500ms);
-    // send_custom_message(setting_span[i].steer_id, can, 8, { reset_command });
   }
 }
 }  // namespace sjsu::drive

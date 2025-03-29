@@ -1,16 +1,3 @@
-// Copyright 2023 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 #include <libhal/can.hpp>
 #include <libhal/error.hpp>
 #include <libhal/motor.hpp>
@@ -20,6 +7,7 @@
 #include <libhal-armcortex/dwt_counter.hpp>
 #include <libhal-armcortex/startup.hpp>
 #include <libhal-armcortex/system_control.hpp>
+#include <libhal-arm-mcu/stm32f1/input_pin.hpp>
 
 #include "ackermann_steering.hpp"
 #include <array>
@@ -43,10 +31,10 @@ hardware_map_t initialize_platform()
 
   static auto& terminal = hal::micromod::v1::console(hal::buffer<1024>);
 
-  // static auto& fl_pin_1 = hal::micromod::v1::input_g0();
-  // static auto& fr_pin_2 = hal::micromod::v1::input_g1();
-  static auto& bl_pin_3 = hal::micromod::v1::input_g0();
-  // static auto& br_pin_4 = hal::micromod::v1::input_g3();
+  static hal::stm32f1::input_pin fl_pin_1('A', 5);  // 60 spi1_sck
+  static hal::stm32f1::input_pin fr_pin_2('A', 6);  // 62 spi1_copi
+  static hal::stm32f1::input_pin bl_pin_3('A', 7);  // 64 spi1_cipo
+  static hal::stm32f1::input_pin br_pin_4('B', 0);  // 34 A0
 
   // static std::array<vector2, 3> wheel_locations = {
   //   vector2::from_bearing(1, -60 * std::numbers::pi / 180),
@@ -65,16 +53,22 @@ hardware_map_t initialize_platform()
   static hal::can_transceiver* can_transceiver;
   static hal::can_bus_manager* bus_man;
   static hal::can_identifier_filter* idf;
+  static hal::can_identifier_filter* idf1;
+
+  // static hal::can_mask_filter* controller_mask;
 
   static std::array<hal::can_message, 8> receive_buffer{};
   can_transceiver = &hal::micromod::v1::can_transceiver(receive_buffer);
   
   bus_man = &hal::micromod::v1::can_bus_manager();
   idf = &hal::micromod::v1::can_identifier_filter0();
-  idf->allow(0x105);
+  idf1 = &hal::micromod::v1::can_identifier_filter1();
+
+  // controller_mask = &hal::micromod::v1::can_mask_filter0();
+  idf1->allow(0x105);
+  // controller_mask->allow(hal::can_mask_filter::pair{.id = 0x100, .mask = 0x7F0});
   hal::print<1028>(terminal, "can initialized\n");
   bus_man->baud_rate(1.0_MHz);
-  // idf->allow(0x248);
   // static std::array<start_wheel_setting, 4> start_wheel_setting_arr = {
   //   front_left_wheel_setting,
   //   front_right_wheel_setting,
@@ -92,7 +86,7 @@ hardware_map_t initialize_platform()
   static std::span<start_wheel_setting, 1> start_wheel_setting_span =
     start_wheel_setting_arr;
 
-  hal::print<1028>(terminal, "Stetting struct intialized\n");
+  // hal::print<1028>(terminal, "Stetting struct intialized\n");
 
   // static hal::actuator::rmd_mc_x_v2 mc_x_front_left_prop(
   //   *can_transceiver,
@@ -156,8 +150,10 @@ hardware_map_t initialize_platform()
     hal::print<1028>(terminal, "RMD created\n");
 
   } catch (const hal::exception& e) {
-    hal::print<1028>(terminal, "RMD did not get created\n");
+    
+    hal::print<1028>(terminal, "Exception code %d\n", e.error_code());
   }
+
 
   static steering_module back_left_leg = {
     .steer = mc_x,
@@ -166,7 +162,7 @@ hardware_map_t initialize_platform()
     .limit_switch = &bl_pin_3,
   };
 
-  // hal::print<1028>(terminal, "Steer rmd intialized\n");
+  hal::print<1028>(terminal, "Steer rmd intialized\n");
 
   // static hal::actuator::rmd_mc_x_v2 mc_x_back_right_prop(
   //   *can_transceiver,
@@ -201,11 +197,10 @@ hardware_map_t initialize_platform()
     steering_modules_arr;
 
   return hardware_map_t{
-    .clock = &counter,
-    .terminal = &terminal,
-    .can_transceiver = can_transceiver,
-    .can_bus_manager = bus_man,
+    .clock = &counter, .terminal = &terminal,
+    .can_transceiver = can_transceiver, .can_bus_manager = bus_man,
     .can_identifier_filter = idf,
+    // .can_mask_filter = controller_mask,
     .steering_modules = steering_modules_span,
     .start_wheel_setting_span = start_wheel_setting_span,
     .reset = []() { hal::cortex_m::reset(); }
