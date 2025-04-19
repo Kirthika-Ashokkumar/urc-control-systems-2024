@@ -70,7 +70,7 @@ constexpr start_wheel_setting front_left_wheel_setting = {
 };
 
 constexpr start_wheel_setting front_right_wheel_setting = {
-  .steer_id = 0x14d,
+  .steer_id = 0x143,
   .prop_id = 0x151,
   .geer_ratio = 36.0f,
   .reversed = false,
@@ -79,6 +79,7 @@ constexpr start_wheel_setting front_right_wheel_setting = {
   .max_speed = 5,
 };
 
+//reversed true is counter clockwise
 constexpr start_wheel_setting back_left_wheel_setting = {
   .steer_id = 0x148,
   .prop_id = 0x152,
@@ -93,7 +94,7 @@ constexpr start_wheel_setting back_right_wheel_setting = {
   .steer_id = 0x14f,
   .prop_id = 0x153,
   .geer_ratio = 36.0f,
-  .reversed = false,
+  .reversed = true,
   .homing_offset = 90,
   .homing_angle = 0,
   .max_speed = 5,

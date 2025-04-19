@@ -125,7 +125,11 @@ void application(hardware_map_t& hardware_map)
    * 101,102,103, 104, 105, 148+16^2..steer id + 16^2
    */
 
-  while (true) {
+  home(steering_modules, start_wheel_settings, clock, console);
+  hal::delay(clock, 1s);
+
+
+  while (false) {
     try {
       std::optional<hal::can_message> msg = homing_reader.find();
 
@@ -169,6 +173,7 @@ void application(hardware_map_t& hardware_map)
     // address_offset = (address_offset + 1) % 16;
     hal::delay(clock, 1s);
   }
+
 }
 
 }  // namespace sjsu::drive
