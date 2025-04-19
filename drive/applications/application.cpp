@@ -124,8 +124,9 @@ void application(hardware_map_t& hardware_map)
   /**
    * 101,102,103, 104, 105, 148+16^2..steer id + 16^2
    */
-
-  while (true) {
+   
+  home(steering_modules, start_wheel_settings, clock, console);
+  while (false) {
     try {
       std::optional<hal::can_message> msg = homing_reader.find();
 

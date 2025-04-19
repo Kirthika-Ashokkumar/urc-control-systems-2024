@@ -27,14 +27,20 @@ hardware_map_t initialize_platform()
   using namespace hal::literals;
   using namespace std::chrono_literals;
 
+
   static auto& counter = hal::micromod::v1::uptime_clock();
 
   static auto& terminal = hal::micromod::v1::console(hal::buffer<1024>);
+
+  hal::print<1028>(terminal, "Console is intialized\n");
+
 
   // static hal::stm32f1::input_pin fl_pin_1('A', 0);  // 60 spi1_sck
   static hal::stm32f1::input_pin fr_pin_2('B', 6);  // 62 spi1_copi
   // static hal::stm32f1::input_pin bl_pin_3('A', 1);  // 64 spi1_cipo
   // static hal::stm32f1::input_pin br_pin_4('B', 0);  // 34 A0
+  hal::print<1028>(terminal, "failing input pin\n");
+
 
   // static std::array<vector2, 3> wheel_locations = {
   //   vector2::from_bearing(1, -60 * std::numbers::pi / 180),
@@ -56,6 +62,7 @@ hardware_map_t initialize_platform()
   static hal::can_identifier_filter* idf1;
   static hal::can_identifier_filter* idf2;
   static hal::can_identifier_filter* idf3;
+
   // static hal::can_identifier_filter* idf4;
   // static hal::can_identifier_filter* idf5;
   // static hal::can_identifier_filter* idf6;
@@ -78,6 +85,18 @@ hardware_map_t initialize_platform()
 
   // controller_mask = &hal::micromod::v1::can_mask_filter0();
   idf0->allow(0x105);
+
+  hal::print<1028>(terminal, "Identifier filter\n");
+  hal::can_message_finder homing_reader(*can_transceiver, 0x105);
+
+  while(true){
+    std::optional<hal::can_message> msg = homing_reader.find();
+    if(msg){
+      hal::print(terminal, "Done homing\n");
+    }
+  }
+
+
   // controller_mask->allow(hal::can_mask_filter::pair{.id = 0x100, .mask = 0x7F0});
   hal::print<1028>(terminal, "can initialized\n");
   bus_man->baud_rate(1.0_MHz);
@@ -111,13 +130,13 @@ hardware_map_t initialize_platform()
   //   mc_x_front_left_prop.acquire_motor(start_wheel_setting_arr[0].max_speed);
   static hal::actuator::rmd_mc_x_v2* mc_x_front_left_steer;
   try{
-    static hal::actuator::rmd_mc_x_v2 temp(
+    static hal::actuator::rmd_mc_x_v2 temp1(
       *can_transceiver,
       *idf1,
       counter,
       start_wheel_setting_arr[0].geer_ratio,
       start_wheel_setting_arr[0].steer_id);
-    mc_x_front_left_steer = &temp;
+    mc_x_front_left_steer = &temp1;
   } catch (const hal::exception& e) {
     hal::print<1028>(terminal, "Exception code %d\n", e.error_code());
   }
@@ -141,13 +160,13 @@ hardware_map_t initialize_platform()
 
   static hal::actuator::rmd_mc_x_v2* mc_x_front_right_steer;
   try{
-    static hal::actuator::rmd_mc_x_v2 temp(
+    static hal::actuator::rmd_mc_x_v2 temp2(
       *can_transceiver,
       *idf2,
       counter,
       start_wheel_setting_arr[1].geer_ratio,
       start_wheel_setting_arr[1].steer_id);
-    mc_x_front_right_steer = &temp;
+    mc_x_front_right_steer = &temp2;
   } catch (const hal::exception& e) {
     hal::print<1028>(terminal, "Exception code %d\n", e.error_code());
   }
@@ -172,13 +191,13 @@ hardware_map_t initialize_platform()
 
   static hal::actuator::rmd_mc_x_v2* mc_x_back_left_steer;
   try {
-    static hal::actuator::rmd_mc_x_v2 temp(
+    static hal::actuator::rmd_mc_x_v2 temp3(
       *can_transceiver,
       *idf3,
       counter,
       start_wheel_setting_arr[2].geer_ratio,
       start_wheel_setting_arr[2].steer_id);
-      mc_x_back_left_steer = &temp;
+      mc_x_back_left_steer = &temp3;
     hal::print<1028>(terminal, "RMD created\n");
 
   } catch (const hal::exception& e) {
