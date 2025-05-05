@@ -6,6 +6,7 @@
 #include <libhal-util/can.hpp>
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
+#include <libhal/input_pin.hpp>
 
 namespace sjsu::drive {
 
@@ -128,6 +129,28 @@ void application(hardware_map_t& hardware_map)
   home(steering_modules, start_wheel_settings, clock, console);
   hal::delay(clock, 1s);
 
+  // hal::print(console, "First Motor\n");
+  // auto& mc_x = steering_modules[0].steer;
+  // mc_x->velocity_control(1);
+  // hal::delay(clock, 5s);
+  // mc_x->velocity_control(0);
+  // hal::delay(clock, 1000ms);
+
+  // hal::print(console, "Going to the next motor\n");
+  // auto& mc_x_1 = steering_modules[1].steer;
+  // mc_x_1->velocity_control(1);
+  // hal::delay(clock, 5s);
+  // mc_x_1->velocity_control(0);
+  // hal::delay(clock, 1000ms);
+
+  // auto& sw = steering_modules[0].limit_switch;
+  // int boolean;
+
+  // while(true){
+  //   boolean  = sw.value()->level() ? 1 : 0;
+  //   hal::print<64>(console, "Value: %d\n", boolean);
+  //   hal::delay(clock, 500ms);
+  // }
 
   while (false) {
     try {

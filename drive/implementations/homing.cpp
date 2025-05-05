@@ -32,10 +32,10 @@ void home(std::span<steering_module> legs,
 
     while (!legs[i].limit_switch.value()->level()) {
       if (setting_span[i].reversed) {
-        mc_x->velocity_control(1);
+        mc_x->velocity_control(-1);
         hal::delay(clock, 10ms);
       } else {
-        mc_x->velocity_control(-1);
+        mc_x->velocity_control(1);
         hal::delay(clock, 10ms);
       }
     }
@@ -45,9 +45,9 @@ void home(std::span<steering_module> legs,
     mc_x->velocity_control(0);  // stops
     hal::delay(clock, 1000ms);
     if(setting_span[i].reversed){
-      mc_x->position_control(stop_angle - setting_span[i].homing_offset, 1);
-    }else{
       mc_x->position_control(stop_angle + setting_span[i].homing_offset, 1);
+    }else{
+      mc_x->position_control(stop_angle - setting_span[i].homing_offset, 1);
     }
     stop_angle = mc_x->feedback().angle();
 
