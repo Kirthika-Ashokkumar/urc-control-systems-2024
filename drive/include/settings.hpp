@@ -65,7 +65,7 @@ constexpr start_wheel_setting front_left_wheel_setting = {
   .prop_id = 0x150,
   .geer_ratio = 36.0f,
   .reversed = false,
-  .homing_offset = 90,
+  .homing_offset = 204,
   .homing_angle = 0,
   .max_speed = 5,
 };

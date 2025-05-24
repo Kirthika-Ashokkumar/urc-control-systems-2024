@@ -41,7 +41,7 @@ void application(hardware_map_t& hardware_map)
   // auto& terminal = *hardware_map.terminal.value();
   // auto& clock = *hardware_map.clock.value();
 
-  // auto& router = *hardware_map.router;
+  // auto& router = *hardware_majp.router;
 
   // drive_configuration_updater configuration_updater;
 
@@ -126,8 +126,8 @@ void application(hardware_map_t& hardware_map)
    * 101,102,103, 104, 105, 148+16^2..steer id + 16^2
    */
 
-  home(steering_modules, start_wheel_settings, clock, console);
-  hal::delay(clock, 1s);
+  // home(steering_modules, start_wheel_settings, clock, console);
+  // hal::delay(clock, 1s);
 
   // hal::print(console, "First Motor\n");
   // auto& mc_x = steering_modules[0].steer;
@@ -151,6 +151,16 @@ void application(hardware_map_t& hardware_map)
   //   hal::print<64>(console, "Value: %d\n", boolean);
   //   hal::delay(clock, 500ms);
   // }
+
+  
+  for (int i = 0; i < 4; i++) {
+    auto& mc_x_1 = steering_modules[i].steer;
+    mc_x_1->velocity_control(1);
+    hal::delay(clock, 5s);
+    mc_x_1->velocity_control(0);
+    hal::delay(clock, 1000ms);
+    hal::print<128>(console, "motor: %d\n", i);
+  }
 
   while (false) {
     try {
@@ -196,7 +206,6 @@ void application(hardware_map_t& hardware_map)
     // address_offset = (address_offset + 1) % 16;
     hal::delay(clock, 1s);
   }
-
 }
 
 }  // namespace sjsu::drive
