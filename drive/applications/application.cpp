@@ -152,11 +152,17 @@ void application(hardware_map_t& hardware_map)
   //   hal::delay(clock, 500ms);
   // }
 
+  hal::print(console, "Right before the printing loop\n");
   
   for (int i = 0; i < 4; i++) {
     auto& mc_x_1 = steering_modules[i].steer;
     mc_x_1->velocity_control(1);
-    hal::delay(clock, 5s);
+    hal::delay(clock, 2s);
+    mc_x_1->velocity_control(0);
+    hal::print(console, "motor stopped\n");
+
+    mc_x_1->velocity_control(-1);
+    hal::delay(clock, 2s);
     mc_x_1->velocity_control(0);
     hal::delay(clock, 1000ms);
     hal::print<128>(console, "motor: %d\n", i);

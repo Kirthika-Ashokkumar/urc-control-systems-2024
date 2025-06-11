@@ -60,7 +60,7 @@ constexpr drive_configuration_rate config_max_delta = {
 };
 
 constexpr start_wheel_setting front_left_wheel_setting = {
-  .steer_id = 0x14c, 
+  .steer_id = 0x14c,
   // .steer_id = 0x14f,
   .prop_id = 0x150,
   .geer_ratio = 36.0f,
@@ -81,7 +81,7 @@ constexpr start_wheel_setting front_right_wheel_setting = {
   .max_speed = 5,
 };
 
-//reversed true is counter clockwise
+// reversed true is counter clockwise
 constexpr start_wheel_setting back_left_wheel_setting = {
   .steer_id = 0x148,
   .prop_id = 0x152,
