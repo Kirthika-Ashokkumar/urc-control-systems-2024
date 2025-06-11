@@ -63,8 +63,8 @@ hardware_map_t initialize_platform()
   static hal::can_identifier_filter* idf1;
   static hal::can_identifier_filter* idf2;
   static hal::can_identifier_filter* idf3;
+  static hal::can_identifier_filter* idf4;
 
-  // static hal::can_identifier_filter* idf4;
   // static hal::can_identifier_filter* idf5;
   // static hal::can_identifier_filter* idf6;
   // static hal::can_identifier_filter* idf7;
@@ -79,7 +79,7 @@ hardware_map_t initialize_platform()
   idf1 = &hal::micromod::v1::can_identifier_filter1();
   idf2 = &hal::micromod::v1::can_identifier_filter2();
   idf3 = &hal::micromod::v1::can_identifier_filter3();
-  // idf4 = &hal::micromod::v1::can_identifier_filter4();
+  idf4 = &hal::micromod::v1::can_identifier_filter4();
   // idf5 = &hal::micromod::v1::can_identifier_filter5();
   // idf6 = &hal::micromod::v1::can_identifier_filter6();
   // idf7 = &hal::micromod::v1::can_identifier_filter7();
@@ -102,13 +102,14 @@ hardware_map_t initialize_platform()
   hal::print<1028>(terminal, "can initialized\n");
   bus_man->baud_rate(1.0_MHz);
 
-  static std::array<start_wheel_setting, 3> start_wheel_setting_arr = {
+  static std::array<start_wheel_setting, 4> start_wheel_setting_arr = {
     front_left_wheel_setting,
     front_right_wheel_setting,
     back_left_wheel_setting,
+    back_right_wheel_setting
   };
 
-  static std::span<start_wheel_setting,3> start_wheel_setting_span =
+  static std::span<start_wheel_setting,4> start_wheel_setting_span =
   start_wheel_setting_arr;
 
   // static std::array<start_wheel_setting, 2> start_wheel_setting_arr = {
@@ -228,8 +229,8 @@ hardware_map_t initialize_platform()
     *can_transceiver,
     *idf4,
     counter,
-    start_wheel_setting_arr[0].geer_ratio,
-    start_wheel_setting_arr[0].steer_id);
+    start_wheel_setting_arr[3].geer_ratio,
+    start_wheel_setting_arr[3].steer_id);
   mc_x_back_right_steer = &temp;
   }catch (const hal::exception& e) {
     hal::print<1028>(terminal, "Exception code %d\n", e.error_code());
@@ -242,17 +243,11 @@ hardware_map_t initialize_platform()
     .limit_switch = nullptr,
   };
 
-  static std::array<steering_module, 3> steering_modules_arr = {
-    front_left_leg, front_right_leg, back_left_leg
+  static std::array<steering_module, 4> steering_modules_arr = {
+    front_left_leg, front_right_leg, back_left_leg, back_right_leg
   };
-  static std::span<steering_module, 3> steering_modules_span =
+  static std::span<steering_module, 4> steering_modules_span =
     steering_modules_arr;
-
-  // static std::array<steering_module, 2> steering_modules_arr = {
-  //   front_left_leg, front_right_leg
-  // };
-  // static std::span<steering_module, 2> steering_modules_span =
-  //   steering_modules_arr;
 
   return hardware_map_t{
     .clock = &counter, .terminal = &terminal,

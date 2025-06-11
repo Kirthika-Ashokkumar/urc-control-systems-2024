@@ -59,10 +59,10 @@ void application(hardware_map_t& hardware_map)
   //   float dt = now - then;
   //   then = now;
 
-  //   // if (next_update < now) {
-  //   //   // // Time out in 10 ms
-  //   //   // auto timeout = hal::create_timeout(clock, 1s);
-  //   //   // auto commands = mission_control.get_command(timeout).value();
+  // if (next_update < now) {
+  //   // // Time out in 10 ms
+  //   // auto timeout = hal::create_timeout(clock, 1s);
+  //   // auto commands = mission_control.get_command(timeout).value();
 
   //   //   // Create a new target and set the updater to go to the new target
   //   //   drive_configuration target;
@@ -98,27 +98,6 @@ void application(hardware_map_t& hardware_map)
   //   // Move all the wheels
   //   router.move(wheel_settings);
 
-  // static hal::actuator::rmd_mc_x_v2 mc_x_front_right_steer(
-  //   can_transceiver,
-  //   can_identifier_filter,
-  //   clock,
-  //   start_wheel_settings[0].geer_ratio,
-  //   start_wheel_settings[0].steer_id);
-  // hal::print(console, "rmd\n");
-
-  // static steering_module front_right_leg = {
-  //   .steer = &mc_x_front_right_steer,
-  //   .propulsion = nullptr
-  //   // .propulsion = &front_right_prop,
-  // };
-
-  // static std::array<steering_module, 1> steering_modules_arr = {
-  //   front_right_leg
-  // };
-
-  // static std::span<steering_module, 1> steering_modules_span =
-  //   steering_modules_arr;
-
   //  hal::print(console, "homing\n");
   // home(steering_modules, start_wheel_settings, can_transceiver, clock,
   // console); hal::delay(clock, 1000ms);
@@ -143,6 +122,7 @@ void application(hardware_map_t& hardware_map)
   // mc_x_1->velocity_control(0);
   // hal::delay(clock, 1000ms);
 
+  // --- Test Limit switch ---
   // auto& sw = steering_modules[0].limit_switch;
   // int boolean;
 
@@ -152,8 +132,7 @@ void application(hardware_map_t& hardware_map)
   //   hal::delay(clock, 500ms);
   // }
 
-  hal::print(console, "Right before the printing loop\n");
-  
+  // --- Testing the steer rmds ---
   for (int i = 0; i < 4; i++) {
     auto& mc_x_1 = steering_modules[i].steer;
     mc_x_1->velocity_control(1);
