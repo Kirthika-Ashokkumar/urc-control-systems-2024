@@ -46,7 +46,6 @@ struct start_wheel_setting{
     int homing_offset;
     int homing_angle;
     hal::rpm max_speed;
-
 };
 
 
