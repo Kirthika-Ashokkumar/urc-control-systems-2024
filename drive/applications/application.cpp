@@ -13,9 +13,9 @@ void application(hardware_map_t& hardware_map)
 {
   using namespace std::chrono_literals;
 
-  auto& led = *hardware_map.led;
-  auto& clock = *hardware_map.clock;
-  auto& console = *hardware_map.console;
+  auto& led = *hardware_map.led.value();
+  auto& clock = *hardware_map.clock.value();
+  auto& console = *hardware_map.console.value();
 
   hal::print(console, "Starting Application!\n");
   hal::print(console, "Will reset after ~10 seconds\n");

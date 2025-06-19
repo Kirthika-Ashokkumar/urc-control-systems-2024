@@ -4,12 +4,13 @@
 #include <libhal/output_pin.hpp>
 #include <libhal/serial.hpp>
 #include <libhal/steady_clock.hpp>
+#include <optional>
 namespace sjsu::drive {
 struct hardware_map_t
 {
-  hal::output_pin* led;
-  hal::serial* console;
-  hal::steady_clock* clock;
+  std::optional<hal::output_pin*> led;
+  std::optional<hal::serial*> console;
+  std::optional<hal::steady_clock*> clock;
   hal::callback<void()> reset;
 };
 
