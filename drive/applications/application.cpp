@@ -36,5 +36,14 @@ void application(hardware_map_t& hardware_map)
   hal::delay(clock, 100ms);
   hardware_map.reset();
 
+
+
+  // application runs homing
+  // stuff to send to mission control:
+  // RMD offsets (if MC can't do math then just send states)
+  // invalid target state (throw error)
+  // system error (no response or something)
+  // accelerometer positions? (accelerometer driver speeds)
+  // drive speeds (target + actual (motors vs accelerometer))? (cause MC doesn't want to do math)
 }
 }
