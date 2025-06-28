@@ -15,6 +15,7 @@
 #pragma once
 
 #include <array>
+#include <libhal-actuator/smart_servo/rmd/mc_x_v2.hpp>
 #include <libhal/adc.hpp>
 #include <libhal/can.hpp>
 #include <libhal/functional.hpp>
@@ -24,20 +25,16 @@
 #include <libhal/pwm.hpp>
 #include <libhal/serial.hpp>
 #include <libhal/steady_clock.hpp>
-#include <libhal-actuator/smart_servo/rmd/mc_x_v2.hpp>
 
-#include "steering_module.hpp"
-#include "wheel_router.hpp"
 #include "ackermann_steering.hpp"
 #include "settings.hpp"
-
-
+#include "steering_module.hpp"
+#include "wheel_router.hpp"
 
 #include <optional>
 
-
 namespace sjsu::drive {
-  
+
 struct hardware_map_t
 {
   std::optional<hal::steady_clock*> clock;
@@ -50,10 +47,10 @@ struct hardware_map_t
   // std::optional<hal::can_identifier_filter*> can_identifier_filter;
   // std::optional<hal::can_mask_filter*> can_mask_filter;
 
-  std::optional<std::span<steering_module, 4>> steering_modules;
-  std::optional<std::span<start_wheel_setting, 4>> start_wheel_setting_span;
-  // std::optional<std::span<steering_module, 1>> steering_modules;
-  // std::optional<std::span<start_wheel_setting, 1>> start_wheel_setting_span;
+  // std::optional<std::span<steering_module, 4>> steering_modules;
+  // std::optional<std::span<start_wheel_setting, 4>> start_wheel_setting_span;
+  std::optional<std::span<steering_module, 1>> steering_modules;
+  std::optional<std::span<start_wheel_setting, 1>> start_wheel_setting_span;
   hal::callback<void()> reset;
 };
 
@@ -63,4 +60,4 @@ hardware_map_t initialize_platform();
 void application(hardware_map_t& p_framework);
 constexpr bool use_can_v1 = false;
 
-}  // namespace sjsu::science
+}  // namespace sjsu::drive

@@ -152,9 +152,8 @@ void application(hardware_map_t& hardware_map)
   //   hal::delay(clock, 500ms);
   // }
 
-  hal::print(console, "Right before the printing loop\n");
   
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 1; i++) {
     auto& mc_x_1 = steering_modules[i].steer;
     mc_x_1->velocity_control(1);
     hal::delay(clock, 2s);
