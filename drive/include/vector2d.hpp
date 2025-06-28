@@ -11,9 +11,8 @@ namespace sjsu::drive {
  * @note all angles are in radians, since math is easier in radians.
  *
  */
-class vector2d
+struct vector2d
 {
-public:
   float x, y;
 
   constexpr vector2d(float p_x = 0, float p_y = 0)
