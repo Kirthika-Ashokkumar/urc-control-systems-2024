@@ -10,7 +10,7 @@ class drivetrain
   // home)
 public:
   // store steer modules
-  //  drive velocity to set state
+  // drive velocity to set state
   void set_target_state(chassis_velocities p_target_state);
 
   // update (run control loop)
@@ -35,7 +35,8 @@ public:
   // what do if interpolation not correct (0 vector)
 
   // dose all interpolation
-  //  stuck (invalid state)
+  // stuck (invalid state)
+  
 };
 
 }  // namespace sjsu::drive

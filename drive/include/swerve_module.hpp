@@ -13,13 +13,15 @@ class swerve_module {
     // most recent measurements (so it don't send a read command every time)
 
     // methods:
-    vector2d calc_module_vector(chassis_velocities p_chassis_velocities);
     // calc target state for vector (closest angle for valid state)
-    swerve_module_state calc_closest_state(vector2d p_module_vector);
+    vector2d calc_module_vector(chassis_velocities p_chassis_velocities);
     // set target state
     void set_target_state(swerve_module_state p_target_state);
+    // TODO: move to calc file?
+    swerve_module_state calc_closest_state(vector2d p_module_vector);
     // optimize freedom
     swerve_module_state calc_freest_state(vector2d p_module_vector);
+    bool can_reach_state(swerve_module_state p_state);
     
     // time for transition
     hal::time_duration transition_time(swerve_module_state p_end_state);
