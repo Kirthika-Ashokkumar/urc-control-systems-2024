@@ -1,0 +1,20 @@
+
+#include "vector2d.hpp"
+#include <libhal/units.hpp>
+
+namespace sjsu::drive {
+
+using meters_per_sec = float;
+using deg_per_sec = float;
+
+struct swerve_module_state {
+    hal::degrees steer_angle;
+    meters_per_sec propulsion_velocity;
+};
+
+struct chassis_velocities {
+    vector2d translation;
+    deg_per_sec rotational_vel; 
+};
+
+}
