@@ -156,15 +156,58 @@ void application(hardware_map_t& hardware_map)
   for (int i = 0; i < 1; i++) {
     auto& mc_x_1 = steering_modules[i].steer;
     mc_x_1->velocity_control(1);
-    hal::delay(clock, 2s);
-    mc_x_1->velocity_control(0);
-    hal::print(console, "motor stopped\n");
+    hal::delay(clock, 5000ms);
+
+    mc_x_1->velocity_control(0.0_rpm);
+    hal::delay(clock, 2000ms);
 
     mc_x_1->velocity_control(-1);
+    hal::delay(clock, 5000ms);
+
+    mc_x_1->velocity_control(0.0_rpm);
+    hal::delay(clock, 2000ms);
+
+    // Position control above 40 RPM seems to cause issues with position
+    // control
+    mc_x_1->position_control(0.0_deg, 1);
+    hal::delay(clock, 1s);
+
+    mc_x_1->position_control(90.0_deg, 1);
     hal::delay(clock, 2s);
-    mc_x_1->velocity_control(0);
-    hal::delay(clock, 1000ms);
-    hal::print<128>(console, "motor: %d\n", i);
+
+    mc_x_1->position_control(180.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(90.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(0.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(-45.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(-90.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(-45.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    mc_x_1->position_control(0.0_deg, 1);
+    hal::delay(clock, 2s);
+
+    // mc_x_1->position_control(180.0_deg, 20.0_rpm);
+    // hal::delay(clock, 2s);
+    // mc_x_1->velocity_control();
+    // hal::delay(clock, 2s);
+    // mc_x_1->velocity_control(0);
+    // hal::print(console, "motor stopped\n");
+
+    // mc_x_1->velocity_control(-1);
+    // hal::delay(clock, 2s);
+    // mc_x_1->velocity_control(0);
+    // hal::delay(clock, 1000ms);
+    // hal::print<128>(console, "motor: %d\n", i);
   }
 
   while (false) {
