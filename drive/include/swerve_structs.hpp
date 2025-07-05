@@ -9,6 +9,8 @@ constexpr int module_count = 4;
 using meters_per_sec = float;
 using meters_per_sec_per_sec = float;
 using deg_per_sec = float;
+using sec = float;
+using radians = float;
 
 struct swerve_module_state
 {

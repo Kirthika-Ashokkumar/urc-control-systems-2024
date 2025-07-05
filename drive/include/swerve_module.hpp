@@ -39,7 +39,7 @@ public:
   bool can_reach_state(swerve_module_state p_state);
 
   // time for transition
-  hal::time_duration transition_time(swerve_module_state p_end_state);
+  sec transition_time(swerve_module_state p_end_state);
 
   // reads state cache
   swerve_module_state get_actual_state_cache();
