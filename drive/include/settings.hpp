@@ -61,8 +61,8 @@ constexpr drive_configuration_rate config_max_delta = {
 
 constexpr start_wheel_setting front_left_wheel_setting = {
   // .steer_id = 0x14c, actual 
-  .steer_id = 0x150,
-  .prop_id = 0x150,
+  .steer_id = 0x14C,
+  .prop_id = 0x148,
   .geer_ratio = 36.0f,
   .reversed = false,
   .homing_offset = 204,
@@ -71,7 +71,7 @@ constexpr start_wheel_setting front_left_wheel_setting = {
 };
 
 constexpr start_wheel_setting front_right_wheel_setting = {
-  .steer_id = 0x143,
+  .steer_id = 0x142,
   .prop_id = 0x14D,
   .geer_ratio = 36.0f,
   .reversed = false,
@@ -82,8 +82,8 @@ constexpr start_wheel_setting front_right_wheel_setting = {
 
 // reversed true is counter clockwise
 constexpr start_wheel_setting back_left_wheel_setting = {
-  .steer_id = 0x148,
-  .prop_id = 0x152,
+  .steer_id = 0x144,
+  .prop_id = 0x141,
   .geer_ratio = 36.0f,
   .reversed = true,
   .homing_offset = 90,
