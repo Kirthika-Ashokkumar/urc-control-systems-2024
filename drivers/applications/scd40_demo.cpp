@@ -1,6 +1,6 @@
-#include <libhal-armcortex/dwt_counter.hpp>
-#include <libhal-armcortex/startup.hpp>
-#include <libhal-armcortex/system_control.hpp>
+// #include <libhal-armcortex/dwt_counter.hpp>
+// #include <libhal-armcortex/startup.hpp>
+// #include <libhal-armcortex/system_control.hpp>
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
 #include <libhal/units.hpp>
@@ -23,7 +23,7 @@ void application(application_framework& p_framework)
   
   // hal::print<64>(terminal, "Hello World!");
 
-  while(false){
+  while(true){
         //get settings test
         // scd40_sensor.stop();
         // auto get = scd40_sensor.get_settings();

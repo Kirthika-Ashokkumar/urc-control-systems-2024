@@ -19,8 +19,6 @@ int main()
 {
   auto hardware_map = sjsu::drivers::initialize_platform();
   try {
-
-    hal::print<1024>(*hardware_map.terminal, "huh?");
     application(hardware_map);
   } catch (...) {
     hal::print<1024>(*hardware_map.terminal,
