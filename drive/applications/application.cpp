@@ -7,6 +7,7 @@
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
 #include <libhal/input_pin.hpp>
+#include <libhal/units.hpp>
 
 namespace sjsu::drive {
 
@@ -152,62 +153,77 @@ void application(hardware_map_t& hardware_map)
   //   hal::delay(clock, 500ms);
   // }
 
-  
-  for (int i = 0; i < 1; i++) {
+  // hal::degrees stop_angle;
+
+  while(true){
+    for (int i = 0; i < 4; i++) {
     auto& mc_x_1 = steering_modules[i].steer;
-    mc_x_1->velocity_control(1);
-    hal::delay(clock, 5000ms);
+    // auto& mc_x_2 = steering_modules[i].propulsion;
 
-    mc_x_1->velocity_control(0.0_rpm);
-    hal::delay(clock, 2000ms);
+    hal::print<128>(console, "Motor: %d\n", i);
+    
+    mc_x_1.value()->feedback_request(
+      hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
 
-    mc_x_1->velocity_control(-1);
-    hal::delay(clock, 5000ms);
+    if (start_wheel_settings[i].reversed) {
+      mc_x_1.value()->velocity_control(-5);
+    }else{
+      mc_x_1.value()->velocity_control(5);
+    }
 
-    mc_x_1->velocity_control(0.0_rpm);
-    hal::delay(clock, 2000ms);
+    // mc_x_2.value()->velocity_control(5);
 
-    // Position control above 40 RPM seems to cause issues with position
-    // control
-    mc_x_1->position_control(0.0_deg, 1);
+    hal::delay(clock, 3s);
+    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
+    mc_x_1.value()->velocity_control(0);
+    // mc_x_2.value()->velocity_control(0);
+
     hal::delay(clock, 1s);
 
-    mc_x_1->position_control(90.0_deg, 1);
-    hal::delay(clock, 2s);
+    if (start_wheel_settings[i].reversed) {
+      mc_x_1.value()->velocity_control(5);
+    }else{
+      mc_x_1.value()->velocity_control(-5);
+    }
 
-    mc_x_1->position_control(180.0_deg, 1);
-    hal::delay(clock, 2s);
+    // mc_x_2.value()->velocity_control(-5);
 
-    mc_x_1->position_control(90.0_deg, 1);
-    hal::delay(clock, 2s);
+    hal::delay(clock, 3s);
 
-    mc_x_1->position_control(0.0_deg, 1);
-    hal::delay(clock, 2s);
+    mc_x_1.value()->feedback_request(
+      hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
 
-    mc_x_1->position_control(-45.0_deg, 1);
-    hal::delay(clock, 2s);
+    mc_x_1.value()->velocity_control(0);
+    // mc_x_2.value()->velocity_control(0);
+    hal::delay(clock, 1s);
 
-    mc_x_1->position_control(-90.0_deg, 1);
-    hal::delay(clock, 2s);
+    // hal::print<128>(console,"Motor: %d\n",i);
+    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+    // stop_angle = mc_x_1->feedback().angle();
+    // hal::print<128>(console,"Starting angle: %f\n", stop_angle);
+    // hal::delay(clock, 5s);
+    // mc_x_1->position_control(stop_angle+90, 10);
+    // hal::delay(clock, 5s);
 
-    mc_x_1->position_control(-45.0_deg, 1);
-    hal::delay(clock, 2s);
+    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+    // stop_angle = mc_x_1->feedback().angle();
+    // hal::print<128>(console,"Middle angle: %f\n", stop_angle);
+    // hal::delay(clock, 5s);
 
-    mc_x_1->position_control(0.0_deg, 1);
-    hal::delay(clock, 2s);
+    // mc_x_1->position_control(stop_angle-90, 10);
+    // hal::delay(clock, 5s);
 
-    // mc_x_1->position_control(180.0_deg, 20.0_rpm);
-    // hal::delay(clock, 2s);
-    // mc_x_1->velocity_control();
-    // hal::delay(clock, 2s);
-    // mc_x_1->velocity_control(0);
     // hal::print(console, "motor stopped\n");
 
-    // mc_x_1->velocity_control(-1);
-    // hal::delay(clock, 2s);
-    // mc_x_1->velocity_control(0);
-    // hal::delay(clock, 1000ms);
-    // hal::print<128>(console, "motor: %d\n", i);
+    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+    // stop_angle = mc_x_1->feedback().angle();
+    // hal::print<128>(console,"Final angle (afterstop): %f\n\n",
+    //                   stop_angle);
+    // hal::delay(clock, 5s);
+  }
+
   }
 
   while (false) {

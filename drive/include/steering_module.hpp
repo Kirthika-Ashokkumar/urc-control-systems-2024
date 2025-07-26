@@ -13,8 +13,8 @@ namespace sjsu::drive {
  */
 struct steering_module
 {
-    hal::actuator::rmd_mc_x_v2* steer; //might change thsi to rmd_mcx_v2
-    std::optional<hal::motor*> propulsion;
+    std::optional<hal::actuator::rmd_mc_x_v2*> steer; //might change thsi to rmd_mcx_v2
+    std::optional<hal::actuator::rmd_mc_x_v2*> propulsion;
     std::optional<hal::input_pin*> limit_switch;
     // drivers::tmag5273* tmag;
 };
