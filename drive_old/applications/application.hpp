@@ -21,7 +21,7 @@
 #include <libhal/i2c.hpp>
 #include <libhal/input_pin.hpp>
 #include <libhal/output_pin.hpp>
-#include <libhal/pwm.hpp>
+// #include <libhal/pwm.hpp>
 #include <libhal/serial.hpp>
 #include <libhal/steady_clock.hpp>
 #include <libhal-actuator/smart_servo/rmd/mc_x_v2.hpp>

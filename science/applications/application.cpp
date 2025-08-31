@@ -27,8 +27,6 @@ void application(hardware_map_t& hardware_map)
   }
 
   // while (true) {
-  //   // Print message
-
   //   auto timeout = hal::create_timeout(clock, 2s);
 
   //   commands = mission_control.get_command(timeout).value();

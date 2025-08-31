@@ -11,7 +11,7 @@ class drivetrain
 public:
   // store steer modules
   // drive velocity to set state
-  void set_target_state(chassis_velocities p_target_state);
+  void set_target_chassis_velocities(chassis_velocities p_target_state);
 
   // update (run control loop)
   // scale vector down to vector and keep swerve in safe states (how pass in

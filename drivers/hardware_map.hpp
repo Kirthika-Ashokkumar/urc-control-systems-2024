@@ -20,7 +20,7 @@
 #include <libhal/i2c.hpp>
 #include <libhal/input_pin.hpp>
 #include <libhal/output_pin.hpp>
-#include <libhal/pwm.hpp>
+// #include <libhal/pwm.hpp>
 #include <libhal/serial.hpp>
 #include <libhal/steady_clock.hpp>
 

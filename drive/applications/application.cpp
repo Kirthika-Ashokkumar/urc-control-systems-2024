@@ -13,28 +13,14 @@ void application(hardware_map_t& hardware_map)
 {
   using namespace std::chrono_literals;
 
-  auto& led = *hardware_map.led.value();
+  // auto& led = *hardware_map.led.value();
   auto& clock = *hardware_map.clock.value();
   auto& console = *hardware_map.console.value();
+  auto& swerve_module = *hardware_map.swerve_modules;
 
   hal::print(console, "Starting Application!\n");
   hal::print(console, "Will reset after ~10 seconds\n");
 
-  for (int i = 0; i < 10; i++) {
-    // Print message
-    hal::print(console, "Hello, World\n");
-
-    // Toggle LED
-    led.level(true);
-    hal::delay(clock, 500ms);
-
-    led.level(false);
-    hal::delay(clock, 500ms);
-  }
-
-  hal::print(console, "Resetting!\n");
-  hal::delay(clock, 100ms);
-  hardware_map.reset();
 
 
 

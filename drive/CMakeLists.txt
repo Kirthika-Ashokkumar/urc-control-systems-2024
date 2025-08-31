@@ -7,4 +7,15 @@ libhal_build_demos(
     DEMOS
     application
 
+    PACKAGES
+    libhal-util
+    libhal-actuator
+
+    LINK_LIBRARIES
+    libhal::util
+    libhal::actuator
+
+    SOURCES
+    ./src/homing.cpp
+
 )
