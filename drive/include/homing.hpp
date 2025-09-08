@@ -1,7 +1,5 @@
 #pragma once
 
-#include "swerve_module.hpp"
-
 #include <cmath>
 #include <cstddef>
 #include <libhal-util/serial.hpp>
@@ -9,6 +7,8 @@
 #include <libhal/steady_clock.hpp>
 #include <libhal/units.hpp>
 #include <span>
+#include "swerve_module.hpp"
+
 
 namespace sjsu::drive {
 

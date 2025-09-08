@@ -4,10 +4,10 @@
 #include <libhal/can.hpp>
 #include <libhal-arm-mcu/stm32f1/input_pin.hpp>
 #include <libhal-actuator/smart_servo/rmd/mc_x_v2.hpp>
+#include <libhal/units.hpp>
 
 
 #include "../applications/application.hpp"
-#include "../include/swerve_structs.hpp"
 #include "../include/swerve_module.hpp"
 
 
@@ -22,10 +22,10 @@ hardware_map_t initialize_platform()
   static auto& counter = hal::micromod::v1::uptime_clock();
 
   hal::print<1028>(terminal, "Created input pin\n");
-  static hal::stm32f1::input_pin fl_pin_1('B', 1);  // 60 spi1_sck
-  static hal::stm32f1::input_pin fr_pin_2('B', 0);  // 62 spi1_copi
-  static hal::stm32f1::input_pin bl_pin_3('A', 7);  // 64 spi1_cipo
-  static hal::stm32f1::input_pin br_pin_4('B', 0);  // 34 A0
+  static hal::stm32f1::input_pin fl_pin_1('B', 0);  // A0
+  static hal::stm32f1::input_pin fr_pin_2('B', 1);  // A1
+  static hal::stm32f1::input_pin bl_pin_3('A', 6);  // 64 spi1_cipo
+  static hal::stm32f1::input_pin br_pin_4('B', 7);  // 34 A0
 
   static hal::can_transceiver* can_transceiver;
   static hal::can_bus_manager* bus_man;
@@ -39,6 +39,7 @@ hardware_map_t initialize_platform()
   static hal::can_identifier_filter* idf7 = &hal::micromod::v1::can_identifier_filter4();
 
   hal::print<1028>(terminal, "can initialized\n");
+  bus_man = &hal::micromod::v1::can_bus_manager();
   bus_man->baud_rate(1.0_MHz);
 
   static swerve_module front_left_wheel;

@@ -6,6 +6,8 @@
 #include <libhal/steady_clock.hpp>
 
 #include "./application.hpp"
+#include "../include/homing.hpp"
+
 
 
 namespace sjsu::drive {
@@ -21,7 +23,7 @@ void application(hardware_map_t& hardware_map)
   hal::print(console, "Starting Application!\n");
   hal::print(console, "Will reset after ~10 seconds\n");
 
-
+  home(swerve_module, clock, console);
 
 
   // application runs homing

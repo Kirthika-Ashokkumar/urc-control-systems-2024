@@ -45,23 +45,23 @@ public:
   // methods:
   // calc target state for vector (closest angle for valid state) 
   // 
-  vector2d calc_module_vector(chassis_velocities p_chassis_velocities);
-  // set target state
-  void set_target_state(swerve_module_state p_target_state);
-  // TODO: move to calc file?
-  swerve_module_state calc_closest_state(vector2d p_module_vector);
-  // optimize freedom
-  swerve_module_state calc_freest_state(vector2d p_module_vector);
-  //in valid range
-  bool can_reach_state(swerve_module_state p_state);
+  // vector2d calc_module_vector(chassis_velocities p_chassis_velocities);
+  // // set target state
+  // void set_target_state(swerve_module_state p_target_state);
+  // // TODO: move to calc file?
+  // swerve_module_state calc_closest_state(vector2d p_module_vector);
+  // // optimize freedom
+  // swerve_module_state calc_freest_state(vector2d p_module_vector);
+  // //in valid range
+  // bool can_reach_state(swerve_module_state p_state);
 
-  // time for transition
-  sec transition_time(swerve_module_state p_end_state);
+  // // time for transition
+  // sec transition_time(swerve_module_state p_end_state);
 
-  // reads state cache
-  swerve_module_state get_actual_state_cache();
-  // refresh state cache
-  swerve_module_state refresh_actual_state_cache();
+  // // reads state cache
+  // swerve_module_state get_actual_state_cache();
+  // // refresh state cache
+  // swerve_module_state refresh_actual_state_cache();
 
   // get actual & target state
   // get actual angle
