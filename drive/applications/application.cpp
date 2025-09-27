@@ -133,18 +133,20 @@ void application(hardware_map_t& hardware_map)
   // }
 
   // --- Testing the steer rmds ---
-  for (int i = 0; i < 4; i++) {
-    auto& mc_x_1 = steering_modules[i].steer;
-    mc_x_1->velocity_control(1);
-    hal::delay(clock, 2s);
-    mc_x_1->velocity_control(0);
-    hal::print(console, "motor stopped\n");
+  while(true){
+      for (int i = 0; i < 4; i++) {
+      auto& mc_x_1 = steering_modules[i].steer;
+      mc_x_1->velocity_control(1);
+      hal::delay(clock, 2s);
+      mc_x_1->velocity_control(0);
+      hal::print(console, "motor stopped\n");
 
-    mc_x_1->velocity_control(-1);
-    hal::delay(clock, 2s);
-    mc_x_1->velocity_control(0);
-    hal::delay(clock, 1000ms);
-    hal::print<128>(console, "motor: %d\n", i);
+      mc_x_1->velocity_control(-1);
+      hal::delay(clock, 2s);
+      mc_x_1->velocity_control(0);
+      hal::delay(clock, 1000ms);
+      hal::print<128>(console, "motor: %d\n", i);
+    }
   }
 
   while (false) {
