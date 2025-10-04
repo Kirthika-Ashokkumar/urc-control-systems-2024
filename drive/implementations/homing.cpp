@@ -24,7 +24,7 @@ void home(std::span<steering_module> legs,
           hal::steady_clock& clock,
           hal::serial& terminal)
 {
-  for (size_t i = 0; i < legs.size(); i++) {
+  for (size_t i = 1; i < legs.size(); i++) {
     auto& mc_x = legs[i].steer;
     mc_x.value()->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
     float start_angle = mc_x.value()->feedback().angle();

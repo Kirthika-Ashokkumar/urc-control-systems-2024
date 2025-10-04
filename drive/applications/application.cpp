@@ -34,6 +34,9 @@ void application(hardware_map_t& hardware_map)
 
   auto& steering_modules = *hardware_map.steering_modules;
   auto& start_wheel_settings = *hardware_map.start_wheel_setting_span;
+  
+  home(steering_modules, start_wheel_settings, clock, console);
+
   // using namespace std::chrono_literals;
   // using namespace hal::literals;
 
@@ -155,76 +158,76 @@ void application(hardware_map_t& hardware_map)
 
   // hal::degrees stop_angle;
 
-  while(true){
-    for (int i = 0; i < 4; i++) {
-    auto& mc_x_1 = steering_modules[i].steer;
-    // auto& mc_x_2 = steering_modules[i].propulsion;
+  // while(true){
+  //   for (int i = 0; i < 4; i++) {
+  //   auto& mc_x_1 = steering_modules[i].steer;
+  //   // auto& mc_x_2 = steering_modules[i].propulsion;
 
-    hal::print<128>(console, "Motor: %d\n", i);
+  //   hal::print<128>(console, "Motor: %d\n", i);
     
-    mc_x_1.value()->feedback_request(
-      hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
-    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
+  //   mc_x_1.value()->feedback_request(
+  //     hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+  //   hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
 
-    if (start_wheel_settings[i].reversed) {
-      mc_x_1.value()->velocity_control(-5);
-    }else{
-      mc_x_1.value()->velocity_control(5);
-    }
+  //   if (start_wheel_settings[i].reversed) {
+  //     mc_x_1.value()->velocity_control(-5);
+  //   }else{
+  //     mc_x_1.value()->velocity_control(5);
+  //   }
 
-    // mc_x_2.value()->velocity_control(5);
+  //   // mc_x_2.value()->velocity_control(5);
 
-    hal::delay(clock, 3s);
-    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
-    mc_x_1.value()->velocity_control(0);
-    // mc_x_2.value()->velocity_control(0);
+  //   hal::delay(clock, 3s);
+  //   hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
+  //   mc_x_1.value()->velocity_control(0);
+  //   // mc_x_2.value()->velocity_control(0);
 
-    hal::delay(clock, 1s);
+  //   hal::delay(clock, 1s);
 
-    if (start_wheel_settings[i].reversed) {
-      mc_x_1.value()->velocity_control(5);
-    }else{
-      mc_x_1.value()->velocity_control(-5);
-    }
+  //   if (start_wheel_settings[i].reversed) {
+  //     mc_x_1.value()->velocity_control(5);
+  //   }else{
+  //     mc_x_1.value()->velocity_control(-5);
+  //   }
 
-    // mc_x_2.value()->velocity_control(-5);
+  //   // mc_x_2.value()->velocity_control(-5);
 
-    hal::delay(clock, 3s);
+  //   hal::delay(clock, 3s);
 
-    mc_x_1.value()->feedback_request(
-      hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
-    hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
+  //   mc_x_1.value()->feedback_request(
+  //     hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+  //   hal::print<128>(console, "Read angle: %f\n", mc_x_1.value()->feedback().angle());
 
-    mc_x_1.value()->velocity_control(0);
-    // mc_x_2.value()->velocity_control(0);
-    hal::delay(clock, 1s);
+  //   mc_x_1.value()->velocity_control(0);
+  //   // mc_x_2.value()->velocity_control(0);
+  //   hal::delay(clock, 1s);
 
-    // hal::print<128>(console,"Motor: %d\n",i);
-    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
-    // stop_angle = mc_x_1->feedback().angle();
-    // hal::print<128>(console,"Starting angle: %f\n", stop_angle);
-    // hal::delay(clock, 5s);
-    // mc_x_1->position_control(stop_angle+90, 10);
-    // hal::delay(clock, 5s);
+  //   // hal::print<128>(console,"Motor: %d\n",i);
+  //   // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+  //   // stop_angle = mc_x_1->feedback().angle();
+  //   // hal::print<128>(console,"Starting angle: %f\n", stop_angle);
+  //   // hal::delay(clock, 5s);
+  //   // mc_x_1->position_control(stop_angle+90, 10);
+  //   // hal::delay(clock, 5s);
 
-    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
-    // stop_angle = mc_x_1->feedback().angle();
-    // hal::print<128>(console,"Middle angle: %f\n", stop_angle);
-    // hal::delay(clock, 5s);
+  //   // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+  //   // stop_angle = mc_x_1->feedback().angle();
+  //   // hal::print<128>(console,"Middle angle: %f\n", stop_angle);
+  //   // hal::delay(clock, 5s);
 
-    // mc_x_1->position_control(stop_angle-90, 10);
-    // hal::delay(clock, 5s);
+  //   // mc_x_1->position_control(stop_angle-90, 10);
+  //   // hal::delay(clock, 5s);
 
-    // hal::print(console, "motor stopped\n");
+  //   // hal::print(console, "motor stopped\n");
 
-    // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
-    // stop_angle = mc_x_1->feedback().angle();
-    // hal::print<128>(console,"Final angle (afterstop): %f\n\n",
-    //                   stop_angle);
-    // hal::delay(clock, 5s);
-  }
+  //   // mc_x_1->feedback_request(hal::actuator::rmd_mc_x_v2::read::multi_turns_angle);
+  //   // stop_angle = mc_x_1->feedback().angle();
+  //   // hal::print<128>(console,"Final angle (afterstop): %f\n\n",
+  //   //                   stop_angle);
+  //   // hal::delay(clock, 5s);
+  // }
 
-  }
+  // }
 
   while (false) {
     try {

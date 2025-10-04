@@ -65,7 +65,7 @@ constexpr start_wheel_setting front_left_wheel_setting = {
   .prop_id = 0x148,
   .geer_ratio = 36.0f,
   .reversed = true,
-  .homing_offset = 204,
+  .homing_offset = 200,
   .homing_angle = 0,
   .max_speed = 5,
 };
@@ -75,7 +75,7 @@ constexpr start_wheel_setting front_right_wheel_setting = {
   .prop_id = 0x14D,
   .geer_ratio = 36.0f,
   .reversed = false,
-  .homing_offset = 204,
+  .homing_offset = 190,
   .homing_angle = 0,
   .max_speed = 5,
 };
@@ -85,8 +85,8 @@ constexpr start_wheel_setting back_left_wheel_setting = {
   .steer_id = 0x144,
   .prop_id = 0x141,
   .geer_ratio = 36.0f,
-  .reversed = false,
-  .homing_offset = 90,
+  .reversed = true,
+  .homing_offset = 190,
   .homing_angle = 0,
   .max_speed = 5,
 };
@@ -95,8 +95,8 @@ constexpr start_wheel_setting back_right_wheel_setting = {
   .steer_id = 0x14f,
   .prop_id = 0x153,
   .geer_ratio = 36.0f,
-  .reversed = true,
-  .homing_offset = 90,
+  .reversed = false,
+  .homing_offset = 190,
   .homing_angle = 0,
   .max_speed = 5,
 };

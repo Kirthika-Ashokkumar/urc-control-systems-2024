@@ -36,10 +36,10 @@ hardware_map_t initialize_platform()
   // static hal::input_pin* in = &hal::micromod::v1::input_g0();
   hal::print<1028>(terminal, "Created input pin\n");
 
-  static hal::stm32f1::input_pin fl_pin_1('B', 1);  // 60 spi1_sck
-  // static hal::stm32f1::input_pin fr_pin_2('B', 0);  // 62 spi1_copi
-  // static hal::stm32f1::input_pin bl_pin_3('A', 7);  // 64 spi1_cipo
-  // static hal::stm32f1::input_pin br_pin_4('B', 0);  // 34 A0
+  static hal::stm32f1::input_pin fl_pin_1('B', 12);  // 60 spi1_sck
+  static hal::stm32f1::input_pin fr_pin_2('B', 13);  // 62 spi1_copi
+  static hal::stm32f1::input_pin bl_pin_3('B', 14);  // 64 spi1_cipo
+  static hal::stm32f1::input_pin br_pin_4('B', 15);  // 34 A0
 
   // static std::array<vector2, 3> wheel_locations = {
   //   vector2::from_bearing(1, -60 * std::numbers::pi / 180),
@@ -172,7 +172,7 @@ hardware_map_t initialize_platform()
     .steer = mc_x_front_right_steer,
     .propulsion = nullptr,
     // .propulsion = &front_right_prop,
-    .limit_switch = nullptr,
+    .limit_switch = &fr_pin_2,
   };
 
   // ------- STEERING MOUDULE 3 ---------
@@ -207,7 +207,7 @@ hardware_map_t initialize_platform()
     .steer = mc_x_back_left_steer,
     // .propulsion = &back_left_prop,
     .propulsion = nullptr,
-    .limit_switch = nullptr,
+    .limit_switch = &bl_pin_3,
   };
 
   // ------- STEERING MOUDULE 4 ---------
@@ -241,7 +241,7 @@ hardware_map_t initialize_platform()
     .steer = mc_x_back_right_steer,
     // .propulsion = &back_right_prop,
     .propulsion = nullptr,
-    .limit_switch = nullptr,
+    .limit_switch = &br_pin_4,
   };
 
   static std::array<steering_module, 4> steering_modules_arr = {
