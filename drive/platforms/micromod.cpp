@@ -57,7 +57,7 @@ hardware_map_t initialize_platform()
 
   static hal::can_transceiver* can_transceiver;
   static hal::can_bus_manager* bus_man;
-  // static hal::can_identifier_filter* idf0;
+  static hal::can_identifier_filter* idf0;
   static hal::can_identifier_filter* idf1;
   static hal::can_identifier_filter* idf2;
   static hal::can_identifier_filter* idf3;
@@ -72,7 +72,7 @@ hardware_map_t initialize_platform()
   can_transceiver = &hal::micromod::v1::can_transceiver(receive_buffer);
 
   bus_man = &hal::micromod::v1::can_bus_manager();
-  // idf0 = &hal::micromod::v1::can_identifier_filter0();
+  idf0 = &hal::micromod::v1::can_identifier_filter0();
   idf1 = &hal::micromod::v1::can_identifier_filter1();
   idf2 = &hal::micromod::v1::can_identifier_filter2();
   idf3 = &hal::micromod::v1::can_identifier_filter3();
@@ -82,9 +82,10 @@ hardware_map_t initialize_platform()
   // idf7 = &hal::micromod::v1::can_identifier_filter7();
 
   // controller_mask = &hal::micromod::v1::can_mask_filter0();
-  // idf0->allow(0x105);
+  idf0->allow(0x110);
   // controller_mask->allow(hal::can_mask_filter::pair{.id = 0x100, .mask =
   // 0x7F0});
+
   hal::print<1028>(terminal, "can initialized\n");
   bus_man->baud_rate(1.0_MHz);
 
