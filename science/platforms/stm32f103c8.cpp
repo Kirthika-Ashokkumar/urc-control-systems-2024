@@ -36,6 +36,7 @@
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
 #include <libhal/pwm.hpp>
+#include <libhal-actuator/rc_servo.hpp>
 #include <libhal/units.hpp>
 
 #include <resource_list.hpp>
@@ -218,6 +219,30 @@ hal::v5::strong_ptr<hal::pwm_group_manager> pwm_frequency()
   auto timer_pwm_frequency = timer1().acquire_pwm_group_frequency();
   return hal::v5::make_strong_ptr<decltype(timer_pwm_frequency)>(
     driver_allocator(), std::move(timer_pwm_frequency));
+}
+
+hal::v5::strong_ptr<hal::pwm> pwm0(){
+  static auto timer_old_pwm = timer1().acquire_pwm(hal::stm32f1::timer1_pin::pa8);
+  return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
+    driver_allocator(), std::move(timer_old_pwm));
+}
+
+hal::v5::optional_ptr<hal::actuator::rc_servo> carousel_servo_ptr;
+hal::v5::strong_ptr<hal::actuator::rc_servo> carousel_servo()
+{
+  if (not carousel_servo_ptr) {
+    static auto carousel_servo_pwm = pwm0();
+    constexpr hal::actuator::rc_servo::settings carousel_servo_settings{
+      .frequency = 50,
+      .min_angle = 0,
+      .max_angle = 190,
+      .min_microseconds = 600,
+      .max_microseconds = 2400,
+    };
+    carousel_servo_ptr = hal::v5::make_strong_ptr<hal::actuator::rc_servo>(
+      driver_allocator(), *carousel_servo_pwm, carousel_servo_settings);
+  }
+  return carousel_servo_ptr;
 }
 
 hal::v5::strong_ptr<hal::can_transceiver> can_transceiver()

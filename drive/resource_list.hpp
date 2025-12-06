@@ -20,6 +20,7 @@
 #include <libhal/usb.hpp>
 #include <libhal/zero_copy_serial.hpp>
 #include <swerve_module.hpp>
+#include <libhal-actuator/rc_servo.hpp>
 
 // Application function must be implemented by one of the compilation units
 // (.cpp) files.
