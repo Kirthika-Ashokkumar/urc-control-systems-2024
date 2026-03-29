@@ -8,7 +8,6 @@ libhal_build_demos(
     application
     carousel_demo
     pump_manager_demo
-    load_cell_demo
 
     INCLUDES
     .
