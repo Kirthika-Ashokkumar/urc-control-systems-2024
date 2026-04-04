@@ -18,23 +18,30 @@ void application()
   // configure drivers
   auto clock = resources::clock();
   auto terminal = resources::console();
-  auto deionized_water_pump = resources::deionized_water_pump();
-  auto benedict_reagent_pump = resources::benedict_reagent_pump();
-  auto biuret_reagent_pump = resources::biuret_reagent_pump();
+
   auto kalling_reagent_pump = resources::kalling_reagent_pump();
+  hal::print<64>(*terminal, "hello i getting past the kalling reagent\n");
 
-  //TODO: replace nullptrs once hardwaremap has been updated
-  auto m_pump_manager = pump_manager(
-    clock,
-    deionized_water_pump,
-    benedict_reagent_pump,
-    biuret_reagent_pump,
-    kalling_reagent_pump
-    );
+  auto benedict_reagent_pump = resources::benedict_reagent_pump();
+  hal::print<64>(*terminal, "hello i getting past the benedict reagent\n");
 
-    while(true){
-        hal::print<64>(*terminal, "hello i am working");
-        m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 5000ms);
-    }
+  auto deionized_water_pump = resources::deionized_water_pump();
+  hal::print<64>(*terminal, "hello i getting past the DI pump\n");
+
+  auto biuret_reagent_pump = resources::biuret_reagent_pump();
+  hal::print<64>(*terminal, "hello i getting past the buriet reagent\n");
+
+  // TODO: replace nullptrs once hardwaremap has been updated
+  auto m_pump_manager = pump_manager(clock,
+                                     deionized_water_pump,
+                                     benedict_reagent_pump,
+                                     biuret_reagent_pump,
+                                     kalling_reagent_pump);
+  hal::print<64>(*terminal, "hello i getting past the pump manager\n");
+
+  while (true) {
+    hal::print<64>(*terminal, "hello i am working\n");
+    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 1000ms);
+  }
 }
-}  // namespace sjsu::drivers
+}  // namespace sjsu::science

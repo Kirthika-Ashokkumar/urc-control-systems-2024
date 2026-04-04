@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <libhal-actuator/rc_servo.hpp>
 #include <libhal-arm-mcu/dwt_counter.hpp>
 #include <libhal-arm-mcu/startup.hpp>
 #include <libhal-arm-mcu/stm32f1/adc.hpp>
@@ -36,11 +37,10 @@
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
 #include <libhal/pwm.hpp>
-#include <libhal-actuator/rc_servo.hpp>
 #include <libhal/units.hpp>
 
-#include <resource_list.hpp>
 #include <libhal/pointers.hpp>
+#include <resource_list.hpp>
 
 namespace sjsu::science::resources {
 using namespace hal::literals;
@@ -48,7 +48,7 @@ using st_peripheral = hal::stm32f1::peripheral;
 
 std::pmr::polymorphic_allocator<> driver_allocator()
 {
-  static std::array<hal::byte, 1024> driver_memory{};
+  static std::array<hal::byte, 4096> driver_memory{};
   static std::pmr::monotonic_buffer_resource resource(
     driver_memory.data(),
     driver_memory.size(),
@@ -82,7 +82,6 @@ hal::v5::strong_ptr<hal::steady_clock> clock()
   }
   return clock_ptr;
 }
-
 
 hal::v5::optional_ptr<hal::serial> console_ptr;
 hal::v5::strong_ptr<hal::serial> console()
@@ -138,46 +137,55 @@ hal::v5::strong_ptr<hal::input_pin> input_pin_0()
     driver_allocator(), gpio_a().acquire_input_pin(0));
 }
 
-hal::v5::strong_ptr<hal::input_pin> input_pin_1()
-{
-  return hal::v5::make_strong_ptr<decltype(gpio_a().acquire_input_pin(15))>(
-    driver_allocator(), gpio_a().acquire_input_pin(15));
-}
-
-hal::v5::strong_ptr<hal::input_pin> input_pin_2()
-{
-  return hal::v5::make_strong_ptr<decltype(gpio_b().acquire_input_pin(3))>(
-    driver_allocator(), gpio_b().acquire_input_pin(3));
-}
-
-hal::v5::strong_ptr<hal::output_pin> deionized_water_pump()
+hal::v5::strong_ptr<hal::output_pin> deionized_water_pump()  // gpio pin 4
 {
   return hal::v5::make_strong_ptr<decltype(gpio_b().acquire_output_pin(12))>(
     driver_allocator(), gpio_b().acquire_output_pin(12));
 }
 
+hal::v5::optional_ptr<hal::output_pin>
+  benedict_reagent_pump_ptr;  // gpio pin 3 --> 5 --> 3
 hal::v5::strong_ptr<hal::output_pin> benedict_reagent_pump()
 {
-  return hal::v5::make_strong_ptr<decltype(gpio_b().acquire_output_pin(4))>(
-    driver_allocator(), gpio_b().acquire_output_pin(4));
+  try {
+    if (not benedict_reagent_pump_ptr) {
+      auto benedict_reagent_pump = gpio_b().acquire_output_pin(4);
+      benedict_reagent_pump_ptr =
+        hal::v5::make_strong_ptr<decltype(benedict_reagent_pump)>(
+          driver_allocator(), std::move(benedict_reagent_pump));
+    }
+    return benedict_reagent_pump_ptr;
+  } catch (hal::exception e) {
+    auto terminal = console();
+    hal::print<64>(*terminal, "error code: %d\n", e.error_code());
+    throw e;
+  }
 }
 
-hal::v5::strong_ptr<hal::output_pin> biuret_reagent_pump()
+hal::v5::strong_ptr<hal::output_pin> biuret_reagent_pump()  // gpio pin 2
 {
   return hal::v5::make_strong_ptr<decltype(gpio_b().acquire_output_pin(3))>(
     driver_allocator(), gpio_b().acquire_output_pin(3));
 }
 
+hal::v5::optional_ptr<hal::output_pin>
+  kalling_reagent_pump_ptr;  // gpio pin 1 --> 0 --> 1
 hal::v5::strong_ptr<hal::output_pin> kalling_reagent_pump()
 {
-  return hal::v5::make_strong_ptr<decltype(gpio_a().acquire_output_pin(15))>(
-    driver_allocator(), gpio_a().acquire_output_pin(15));
-}
+  try {
+    if (not kalling_reagent_pump_ptr) {
+      auto kalling_reagent_pump = gpio_a().acquire_output_pin(15);
+      kalling_reagent_pump_ptr =
+        hal::v5::make_strong_ptr<decltype(kalling_reagent_pump)>(
+          driver_allocator(), std::move(kalling_reagent_pump));
+    }
+    return kalling_reagent_pump_ptr;
 
-hal::v5::strong_ptr<hal::output_pin> output_pin_4()
-{
-  return hal::v5::make_strong_ptr<decltype(gpio_b().acquire_output_pin(12))>(
-    driver_allocator(), gpio_b().acquire_output_pin(12));
+  } catch (hal::exception e) {
+    auto terminal = console();
+    hal::print<64>(*terminal, "error code: %d\n", e.error_code());
+    throw e;
+  }
 }
 
 auto& timer1()
@@ -221,8 +229,10 @@ hal::v5::strong_ptr<hal::pwm_group_manager> pwm_frequency()
     driver_allocator(), std::move(timer_pwm_frequency));
 }
 
-hal::v5::strong_ptr<hal::pwm> pwm0(){
-  static auto timer_old_pwm = timer1().acquire_pwm(hal::stm32f1::timer1_pin::pa8);
+hal::v5::strong_ptr<hal::pwm> pwm0()
+{
+  static auto timer_old_pwm =
+    timer1().acquire_pwm(hal::stm32f1::timer1_pin::pa8);
   return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
     driver_allocator(), std::move(timer_old_pwm));
 }
@@ -294,7 +304,7 @@ hal::v5::strong_ptr<hal::can_interrupt> can_interrupt()
   }
 }
 
-}  // namespace sjsu::drivers::resources
+}  // namespace sjsu::science::resources
 namespace sjsu::science {
 void initialize_platform()
 {
@@ -329,4 +339,4 @@ void initialize_platform()
 
   hal::stm32f1::release_jtag_pins();
 }
-}  // namespace sjsu::drivers
+}  // namespace sjsu::science
