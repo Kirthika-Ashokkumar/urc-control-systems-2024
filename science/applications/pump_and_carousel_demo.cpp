@@ -6,6 +6,7 @@
 #include <libhal/units.hpp>
 
 #include "../include/pump_manager.hpp"
+#include "../include/carousel.hpp"
 
 #include <resource_list.hpp>
 
@@ -19,6 +20,10 @@ void application()
   // configure drivers
   auto clock = resources::clock();
   auto terminal = resources::console();
+  // auto carousel_servo_ptr = resources::carousel_servo();
+  // carousel carousel_servo(carousel_servo_ptr);
+  // carousel_servo.home();
+
 
   auto kalling_reagent_pump = resources::kalling_reagent_pump();
   hal::print<64>(*terminal, "hello i getting past the kalling reagent\n");
@@ -39,13 +44,20 @@ void application()
                                      biuret_reagent_pump,
                                      kalling_reagent_pump);
   hal::print<64>(*terminal, "hello i getting past the pump manager\n");
+  // int step = 1;
 
   while (true) {
     hal::print<64>(*terminal, "pumping DI water\n");
-    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 10000ms);
-    hal::print<64>(*terminal, "pumping benedict reagent\n");
-    m_pump_manager.pump(pump_manager::pumps::BENEDICT_REAGENT, 1000ms);
-    
+    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 1000ms);
+    hal::print<64>(*terminal, "pumping biuret reagent\n");
+    m_pump_manager.pump(pump_manager::pumps::KALLING_REAGENT, 1000ms);
+    // carousel_servo.step_move(step);
+    // hal::delay(*clock, 500ms );
+    // step++;
+    // if(step >= 9){
+    //   step = 1;
+    // }
+
   }
 }
 }  // namespace sjsu::science

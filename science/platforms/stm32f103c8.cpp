@@ -144,7 +144,7 @@ hal::v5::strong_ptr<hal::output_pin> deionized_water_pump()  // gpio pin 4
 }
 
 hal::v5::optional_ptr<hal::output_pin>
-  benedict_reagent_pump_ptr;  // gpio pin 3 --> 5 --> 3
+  benedict_reagent_pump_ptr;  // gpio pin 3 --> 5
 hal::v5::strong_ptr<hal::output_pin> benedict_reagent_pump()
 {
   try {
@@ -169,7 +169,7 @@ hal::v5::strong_ptr<hal::output_pin> biuret_reagent_pump()  // gpio pin 2
 }
 
 hal::v5::optional_ptr<hal::output_pin>
-  kalling_reagent_pump_ptr;  // gpio pin 1 --> 0 --> 1
+  kalling_reagent_pump_ptr;  // gpio pin 1 --> 0
 hal::v5::strong_ptr<hal::output_pin> kalling_reagent_pump()
 {
   try {

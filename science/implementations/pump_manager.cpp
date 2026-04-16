@@ -12,7 +12,12 @@ pump_manager::pump_manager(
   , m_pumps{ p_deionized_water_pump,
              p_benedict_reagent_pump,
              p_biuret_reagent,
-             p_kalling_reagent_pump} {};
+             p_kalling_reagent_pump} {
+              (m_pumps[static_cast<int>(pumps::DEIONIZED_WATER)])->level(false);
+              (m_pumps[static_cast<int>(pumps::BENEDICT_REAGENT)])->level(false);
+              (m_pumps[static_cast<int>(pumps::BIURET_REAGENT)])->level(false);
+              (m_pumps[static_cast<int>(pumps::KALLING_REAGENT)])->level(false);
+             };
 
 void pump_manager::pump(pumps pump, hal::time_duration duration)
 {
