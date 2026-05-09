@@ -7,8 +7,8 @@ libhal_build_demos(
     DEMOS
     application
     carousel_demo
+    load_cell_demo
     pump_manager_demo
-    pump_and_carousel_demo
     
     INCLUDES
     .
@@ -22,10 +22,12 @@ libhal_build_demos(
     PACKAGES
     libhal-util
     libhal-actuator
+    libhal-expander
 
 
     LINK_LIBRARIES
     libhal::util
     libhal::actuator
+    libhal::expander
 
 ) 

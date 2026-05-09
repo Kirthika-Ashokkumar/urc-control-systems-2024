@@ -8,7 +8,10 @@ science_state_machine::science_state_machine(
   hal::v5::strong_ptr<hal::actuator::rc_servo> p_arm_servo,
   hal::v5::strong_ptr<hal::actuator::rc_servo> p_trap_door,
   hal::v5::strong_ptr<hal::actuator::rc_servo> p_mixer,
-  hal::v5::strong_ptr<hal::actuator::rc_servo> p_door,
+  hal::v5::strong_ptr<hal::actuator::rc_servo> p_door, 
+  hal::v5::strong_ptr<hal::actuator::rc_servo> p_cache, 
+  hal::v5::strong_ptr<hal::input_pin> p_top_door_limit_switch,
+  hal::v5::strong_ptr<hal::input_pin> p_bottom_door_limit_switch,
   hal::v5::strong_ptr<carousel> p_carousel,
   hal::v5::strong_ptr<pump_manager> p_pump_manager,
   hal::v5::strong_ptr<hal::steady_clock> p_clock,
@@ -17,6 +20,9 @@ science_state_machine::science_state_machine(
   , m_trap_door(p_trap_door)
   , m_mixer(p_mixer)
   , m_door(p_door)
+  , m_cache(p_cache)
+  , m_top_door_limit_switch(p_top_door_limit_switch)
+  , m_bottom_door_limit_switch(p_bottom_door_limit_switch)
   , m_carousel(p_carousel)
   , m_pump_manager(p_pump_manager)
   , m_clock(p_clock)
@@ -33,22 +39,23 @@ void science_state_machine::mix_solution([[maybe_unused]] int rotations){
   //:TO-DO
 }
 
-void science_state_machine::run_state_machine(science_states state)
+
+void science_state_machine::run_state_machine([[maybe_unused]] science_states state)
 {
   switch(state){
     case science_state_machine::science_states::HOME_CAROUSEL:
       m_carousel->home();
       break;
     case science_state_machine::science_states::CUP_OUTSIDE:
+      m_arm_servo->position(0);
+      hal::delay(*m_clock, 1000ms);
       m_door->position(180);
-      hal::delay(*m_clock, 1000ms);
-      m_arm_servo->position(180);
-      hal::delay(*m_clock, 1000ms);
+      hal::delay(*m_clock, 1000ms);   
       break;
     case science_state_machine::science_states::CUP_INSIDE:
       m_arm_servo->position(0);
       hal::delay(*m_clock, 1000ms);
-      m_door->position(0);
+      m_door->position(180);
       hal::delay(*m_clock, 1000ms);
       break;
     case science_state_machine::science_states::DUMP_SAMPLE: 
