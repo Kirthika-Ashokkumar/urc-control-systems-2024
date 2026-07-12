@@ -258,17 +258,17 @@ hal::v5::strong_ptr<hal::pwm_group_manager> pwm_frequency()
     driver_allocator(), std::move(timer_pwm_frequency));
 }
 
-hal::v5::strong_ptr<hal::pwm> pwm0(){
-  static auto timer_old_pwm = timer1().acquire_pwm(hal::stm32f1::timer1_pin::pa8);
-  return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
-    driver_allocator(), std::move(timer_old_pwm));
-}
+// hal::v5::strong_ptr<hal::pwm> pwm0(){
+//   static auto timer_old_pwm = timer1().acquire_pwm(hal::stm32f1::timer1_pin::pa8);
+//   return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
+//     driver_allocator(), std::move(timer_old_pwm));
+// }
 
-hal::v5::strong_ptr<hal::pwm> pwm1(){
-  static auto timer_old_pwm = timer2().acquire_pwm(hal::stm32f1::timer2_pin::pa1);
-  return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
-    driver_allocator(), std::move(timer_old_pwm));
-}
+// hal::v5::strong_ptr<hal::pwm> pwm1(){
+//   static auto timer_old_pwm = timer2().acquire_pwm(hal::stm32f1::timer2_pin::pa1);
+//   return hal::v5::make_strong_ptr<decltype(timer_old_pwm)>(
+//     driver_allocator(), std::move(timer_old_pwm));
+// }
 
 hal::v5::optional_ptr<hal::actuator::rc_servo> mixer_servo_ptr;
 hal::v5::strong_ptr<hal::actuator::rc_servo> mixer_servo()
@@ -350,7 +350,7 @@ hal::v5::optional_ptr<hal::actuator::rc_servo> carousel_servo_ptr;
 hal::v5::strong_ptr<hal::actuator::rc_servo> carousel_servo()
 {
   if (not carousel_servo_ptr) {
-    static auto carousel_servo_pwm = pwm0();
+    // static auto carousel_servo_pwm = pwm0();
     auto servo_pca_ptr = pca();
     static auto carousel_pwm4 = servo_pca_ptr->get_pwm_channel<4>();
     constexpr hal::actuator::rc_servo::settings carousel_servo_settings{

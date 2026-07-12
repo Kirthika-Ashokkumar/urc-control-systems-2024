@@ -6,31 +6,43 @@
 #include <libhal/units.hpp>
 
 #include "../include/pump_manager.hpp"
-#include "application.hpp"
 
 using namespace hal::literals;
 using namespace std::chrono_literals;
+#include <resource_list.hpp>
+
 
 namespace sjsu::science {
 
-void application(hardware_map_t& p_framework)
+void application()
 {
   // configure drivers
-  auto& clock = *p_framework.steady_clock;
-  auto& terminal = *p_framework.terminal;
-  //TODO: replace nullptrs once hardwaremap has been updated
-  auto m_pump_manager = pump_manager(
-    clock,
-    *p_framework.deionized_water_pump,
-    *p_framework.sample_pump,
-    *p_framework.molisch_reagent_pump,
-    *p_framework.sulfuric_acid_pump,
-    *p_framework.biuret_reagent
-    );
+  auto clock = resources::clock();
+  auto terminal = resources::console();
+  
+  auto deionized_pump  = resources::deionized_water_pump();
+  hal::print(*terminal, "DI pump\n");
+  auto benedict_pump = resources::benedict_reagent_pump();
+  hal::print(*terminal, "BEN pump\n");
+  auto biuret_pump = resources::biuret_reagent_pump();
+  hal::print(*terminal, "BIUR pump\n");
+  auto kalling_pump = resources::kalling_reagent_pump();
+  hal::print(*terminal, "KALL pump\n");
+  
+  // TODO: replace nullptrs once hardwaremap has been updated
+  auto m_pump_manager = pump_manager(clock,
+                                    deionized_pump,
+                                    benedict_pump,
+                                    biuret_pump,
+                                    kalling_pump);
 
-    while(true){
-        hal::print<64>(terminal, "hello i am working");
-        m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 1000ms);
-    }
+  while (true) {
+    hal::print(*terminal, "hello i am working");
+    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 1000ms);
+    m_pump_manager.pump(pump_manager::pumps::BENEDICT_REAGENT, 1000ms);
+    m_pump_manager.pump(pump_manager::pumps::BIURET_REAGENT, 1000ms);
+    m_pump_manager.pump(pump_manager::pumps::KALLING_REAGENT, 1000ms);
+
+  }
 }
-}  // namespace sjsu::drivers
+}  // namespace sjsu::science
