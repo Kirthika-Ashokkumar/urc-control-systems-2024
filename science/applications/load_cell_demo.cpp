@@ -50,7 +50,7 @@ void application()
   int begin = 0;
 
   // read value from adc
-  //  values buffered into array and digital
+  // values buffered into array and digital
   while (true) {
     adc_data[begin] = adc->read();
     hal::print<128>(

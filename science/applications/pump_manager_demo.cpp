@@ -41,11 +41,18 @@ void application()
   hal::print<64>(*terminal, "hello i getting past the pump manager\n");
 
   while (true) {
-    hal::print<64>(*terminal, "pumping DI water\n");
-    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 10000ms);
-    hal::print<64>(*terminal, "pumping benedict reagent\n");
-    m_pump_manager.pump(pump_manager::pumps::BENEDICT_REAGENT, 1000ms);
-    
+    m_pump_manager.pump(pump_manager::pumps::DEIONIZED_WATER, 5000ms);
+    hal::print(*terminal, "Running DEIONIZED_WATER pump\n");
+
+    m_pump_manager.pump(pump_manager::pumps::BENEDICT_REAGENT, 5000ms);
+    hal::print(*terminal, "Running BENEDICT_REAGENT pump\n");
+
+    m_pump_manager.pump(pump_manager::pumps::BIURET_REAGENT, 5000ms);
+    hal::print(*terminal, "Running BIURET_REAGENT pump\n");
+
+    m_pump_manager.pump(pump_manager::pumps::KALLING_REAGENT, 5000ms);
+    hal::print(*terminal, "Running KALLING_REAGENT pump\n");
+    hal::delay(*clock, 1000ms);
   }
 }
 }  // namespace sjsu::science

@@ -9,7 +9,8 @@ libhal_build_demos(
     carousel_demo
     load_cell_demo
     pump_manager_demo
-    
+    open_sauce_demo
+
     INCLUDES
     .
 
