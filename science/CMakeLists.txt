@@ -9,6 +9,7 @@ libhal_build_demos(
     carousel_demo
     load_cell_demo
     pump_manager_demo
+    magnetic_encoder_demo
 
     INCLUDES
     .
@@ -22,11 +23,14 @@ libhal_build_demos(
     libhal-util
     libhal-actuator
     libhal-expander
+    libhal-sensor
 
 
     LINK_LIBRARIES
     libhal::util
     libhal::actuator
     libhal::expander
+    libhal::sensor
+
 
 ) 
