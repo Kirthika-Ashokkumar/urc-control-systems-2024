@@ -17,5 +17,3 @@ class demos(ConanFile):
         self.requires("libhal-actuator/1.2.3")
         self.requires("libhal-sensor/1.2.0")
         self.requires("libhal-expander/1.3.1")
-
-

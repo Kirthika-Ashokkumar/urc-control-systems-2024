@@ -33,4 +33,4 @@ libhal_build_demos(
     libhal::sensor
 
 
-) 
+)
